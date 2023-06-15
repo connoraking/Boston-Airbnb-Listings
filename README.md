@@ -14,7 +14,19 @@ The [Shiny app](https://connoraking.shinyapps.io/boston_listings_app/) was hoste
 ## Introduction
 
 ### Project Overview
+
+This project serves as a demonstration of my proficiency in R programming, data analysis, and geospatial visualization. I have designed and developed an interactive tool using R and the Mapbox API that showcases various employment sectors and demographic trends across different geographical locations. The interactive map produced is particularly useful in visualizing and understanding the spatial distribution of these attributes, providing meaningful insights for urban planning, policy-making, and resource allocation decisions.
+
+### Tools and Libaries used
+
 In the course of this project, I've applied extensive use of various R libraries:
 
-- `Plotly`: A tool for creating interactive plots. It was used for both map layers and the boxplot visualization of the distribution of Airbnb listing prices across different neighborhoods.
-- 
+- **Data Manipulation**: `tidyverse`
+- **Geospatial Analysis**: `sf`, `tmaptools`
+- **Data Visualization**: `plotly`, `ggplot2`, `viridis`
+- **Shiny App Development**: `shiny`, `shinyWidgets`
+- **Map Rendering**: `mapboxapi`
+
+### Data Acquisition
+
+- Listings (March 19th 2023): [Inside Airbnb](http://insideairbnb.com/get-the-data/)
