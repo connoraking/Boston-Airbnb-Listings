@@ -1,0 +1,349 @@
+---
+title: "boston airbnb maps"
+author: "Connor King"
+date: "2023-06-05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Mapping Price
+
+```{r, include = FALSE}
+library(tidyverse)
+library(plotly)
+library(mapboxapi)
+library(shiny)
+library(sf)
+
+listings <- read_csv("listings_2023.csv")
+
+listings %>% 
+  filter(price == 0) %>% 
+  select(name, room_type, price)
+
+boston_airbnb <-
+  listings %>% 
+  filter(price > 0 & price <= 9999) %>% 
+  mutate(log_price = log(price, 10)) 
+
+boston_airbnb$neighbourhood[boston_airbnb$neighbourhood == 'Longwood Medical Area'] = 'Longwood'
+
+lvls <- 
+  boston_airbnb %>% 
+  group_by(neighbourhood) %>% 
+  summarise(m = median(price)) %>% 
+  arrange(m) %>% 
+  pull(neighbourhood)
+
+p_box <-
+  plot_ly(
+    boston_airbnb,
+    x = ~factor(neighbourhood, lvls),
+    y = ~price,
+    type = "box",
+    showlegend = FALSE,
+    name = ""
+  ) %>% 
+  layout(
+    yaxis = list(type = "log", title = "log(price)"),
+    xaxis = list(title = "", tickangle = -35)
+  )
+```
+
+
+```{r}
+
+Sys.setenv("MAPBOX_TOKEN" = "pk.eyJ1IjoiYm9zdG9uY29ubm9yMTEiLCJhIjoiY2xncXIya2VxMGc1cTNmc2I3NjFoY2NkMyJ9.fcKb-W66WPlzv4oOx6ZC4A")
+
+p <- 
+  plot_mapbox(boston_airbnb, width = 1200, height = 900) %>% 
+  add_markers(
+    x = ~longitude,
+    y = ~latitude,
+    color = ~log_price,
+    name  = "Log (base 10) of price",
+    text = 
+      ~paste(
+        name,
+        "\nRoom type:", room_type,
+        "\nPrice: ", price,
+        "\nNeighborhood: ", neighbourhood,
+        "\nMinimum nights: ", minimum_nights
+      ),
+    hoverinfo = "text"
+  ) %>% 
+  layout(
+    mapbox = 
+      list(
+        center = list(lat = 42.32, lon = -71.1),
+        zoom = 9.5,
+        style = "dark"
+      )
+  )
+
+p
+```
+
+
+## Adding T stations and T lines
+
+I will insert a `GPX` formatted file of MBTA stations from  http://erikdemaine.org/maps/mbta/ which incluedes all the waypoints of the MBTA stations as well as routes of rapid transit lines.
+
+I will use `read_GPX()` function from `tmaptools` package which reas `GPX` files into `sf` objects in R.
+
+```{r}
+library(tmaptools)
+mbta <- read_GPX("mbta.gpx")
+
+stations <-
+  mbta$waypoints %>%
+    filter(grepl('Red Line|Green Line|Blue Line|Orange Line', type))
+
+T_lines <-
+  mbta$tracks %>%
+    filter(grepl('Red Line|Green Line|Blue Line|Orange Line', name))
+
+  (p %>% 
+  add_sf(
+    data = stations,
+    inherit = FALSE,
+    name = "MBTA T stations",
+    text = ~name,
+    hoverinfo = "text"
+  ) %>% 
+  add_sf(
+    data = T_lines,
+    text = ~name,
+    hoverinfo = "text",
+    name = "MBTA T lines"
+  )
+)
+
+```
+
+Now we will change the lines according to color. 
+
+```{r}
+T_lines %>% 
+  select(name)
+```
+
+As shown, there are multiple lines with a respective color. Thus I will create a function that filters through the `name` column and adds an `sf` layer.
+
+```{r}
+add_MBTA_line <- function(p, line_color) {
+  res <-
+    p %>% 
+      add_sf(
+        data = T_lines %>% filter(grepl(line_color, name, ignore.case = TRUE)),
+        color = ~I(line_color),
+        text = ~name,
+        hoverinfo = "text",
+        name = paste0(line_color, " line")
+      )
+  return(res)  
+}
+
+p_lines <- 
+  p %>% 
+    add_sf(
+      data = stations,
+      name = "MBTA T stations",
+      text = ~paste0(name, " (", type, ")"),
+      hoverinfo = "text",
+      color = I("pink"),
+      size = I(30)
+    ) %>%
+    add_MBTA_line("red") %>%
+    add_MBTA_line("green") %>%
+    add_MBTA_line("orange") %>%
+    add_MBTA_line("blue") %>% 
+    colorbar(title = "log(price)")
+
+p_lines
+
+```
+
+## Map with Neighborhood Boundaries
+
+I will use a `KML` formatted file from https://data.boston.gov/dataset/boston-neighborhoods that contains the boundaries of all of Boston's neighborhoods.
+
+To read the `KML` data into `sf`, we will use `st_read` from the `sf` package.
+
+```{r}
+boston_neighborhoods <- sf::st_read("Boston_Neighborhoods.kml")
+
+p1 <- 
+  p %>%
+    add_sf(
+      inherit = FALSE,
+      data = boston_neighborhoods,
+      fill = "",
+      name = "Neighborhoods Boundaries",
+      text = ~Name,
+      hoverinfo = "text",
+      color = I("azure4")
+    ) %>% 
+    colorbar(title = "log(price)")
+
+pp <- subplot(p_box, p1, nrows = 2, heights = c(0.2, 0.8), margin = 0.1)
+pp
+
+```
+
+
+## Additional Mobility and Accessbility Infrastructure
+
+Now I will incorporate Bluebikes stations and Police Stations. 
+
+```{r}
+police <- read_csv("Boston_Police_Stations.csv")
+bikes <- read_csv("Blue_Bike_Stations.csv")
+meters <- read_csv("Parking_Meters.csv")
+hospitals <- read_csv("Hospitals.csv")
+ev <- read_csv("Charging_Stations.csv")
+
+
+meters <- meters %>%
+  separate(PAY_POLICY, into = c("pay_time", "pay_days", "pay_rate", "pay_duration"), sep = " ", extra = "merge") %>% 
+  mutate(pay_duration = as.numeric(pay_duration)/60)
+```
+
+
+```{r}
+
+p_h <- p %>% 
+  add_trace(
+    data = hospitals,
+    x = ~Longitude,
+    y = ~Latitude,
+    mode = 'markers',
+    name = "Hospitals",
+    text = ~paste(Name,
+                  "\nAddress: ", Address),
+    hoverinfo = "text",
+    marker = list(color = 'magenta', size = 7)
+  ) %>% 
+  add_trace(
+    data = bikes,
+    x = ~Longitude,
+    y = ~Latitude,
+    opacity = 0.5,
+    mode = 'markers',
+    name = "Bike Stations",
+    text = ~paste("Station Number: ", Number,
+                  "\nAddress: ", Name,
+                  "\nTotal Docks: ", Total_docks),
+    hoverinfo = "text",
+    marker = list(color = 'navy', size = 5)
+  ) %>% 
+  add_trace(
+    data = police,
+    x = ~CENTROIDX,
+    y = ~CENTROIDY,
+    mode = 'markers',
+    name = "Police Stations",
+    text = ~paste("Address: ", ADDRESS),
+    hoverinfo = "text",
+    marker = list(color = 'red', size = 10)
+  ) %>% 
+  add_trace(
+    data = ev,
+    x = ~Longitude,
+    y = ~Latitude,
+    mode = 'markers',
+    name = 'EV Charging Stations',
+    text = ~paste(
+      Station_Name,
+      "\nAddress: ", Street_Address,
+      "\nNetwork ", ifelse(is.na(EV_Network), "Not Available", EV_Network),
+      "\nConnector: ", EV_Connector_Types
+    ),
+    hoverinfo = "text",
+    marker = list(color = "orange", size = 7)
+  ) %>% 
+  add_trace(
+    data = meters,
+    x = ~LONGITUDE,
+    y = ~LATITUDE,
+    opacity = 0.5,
+    mode = 'markers',
+    name = 'Parking Meters',
+    text = ~paste(
+      "Payment Days: ", pay_days,
+      "\nPayment Times: ", pay_time,
+      "\nRate (per hour): ", pay_rate,
+      "\nDuration (hours): ", pay_duration
+    ),
+    hoverinfo = "text",
+    marker = list(color = "#8c564b", size = 7)
+  )
+  
+
+p_h
+```
+
+By visualizing Bluebikes station locations alongside Airbnb listings, potential renters can easily identify listings with convenient access to bike-sharing facilities. This could be a crucial deciding factor for those prioritizing active transportation, and also provides a glimpse into the infrastructure of the city.
+
+The location of police stations can be a proxy for the security and safety infrastructure of the city. By visualizing police station locations, I offer viewers an opportunity to assess the accessibility of police services from different listings. While it's not a direct measure of a neighborhood's safety, proximity to a police station might be an important consideration for some renters.
+
+#### Sources
+
+Bluebikes: https://data.boston.gov/dataset/blue-bike-stations
+Police Stations: https://data.boston.gov/dataset/boston-police-stations
+
+### Choropleth Map 
+
+Here's a Choropleth Map using `ggplot` that visualizes the average price for each neighborhood.
+
+```{r, fig.width= 10, fig.height= 10}
+
+library(viridis)
+
+neigh_means <- boston_airbnb %>% 
+  group_by(neighbourhood) %>% 
+  summarise(mean = mean(price)) %>% 
+  rename(Name = neighbourhood) #to match boston_neighborhoods
+
+df_neigh <- na.omit(left_join(boston_neighborhoods, neigh_means, by = "Name"))
+
+g_choro <- ggplot() +
+  geom_sf(data = df_neigh, aes(fill = mean), color = NA) +
+  geom_sf_text(data = df_neigh, aes(label = Name), size = 2, color = "red") +
+  scale_fill_gradientn(colors = viridis(100)) +
+  theme_minimal()
+
+g_choro
+
+p_choro <- ggplotly(g_choro)
+
+ggsave("neigh choro.png", plot = g_choro, dpi = 300, width = 12, height = 12)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

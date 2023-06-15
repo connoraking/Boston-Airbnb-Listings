@@ -1,0 +1,106 @@
+---
+title: "airbnb eda"
+author: "Connor King"
+date: "2023-06-05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+links:
+listings http://insideairbnb.com/get-the-data/
+
+## Dataset
+
+```{r}
+library(tidyverse)
+library(plotly)
+#listings from march 19 2023
+listings <- read_csv("listings_2023.csv")
+  
+Sys.setenv("MAPBOX_TOKEN" = "pk.eyJ1IjoiYm9zdG9uY29ubm9yMTEiLCJhIjoiY2xncXIya2VxMGc1cTNmc2I3NjFoY2NkMyJ9.fcKb-W66WPlzv4oOx6ZC4A")
+```
+
+```{r}
+summary(listings$price)
+```
+```{r}
+plot_ly(listings, y = ~price, type = "box")
+```
+
+```{r}
+plot_ly(listings, x = ~price, type = "histogram")
+```
+
+As the boxplot shows, there appears to be some heavy outliers especially the listings around 10k.
+
+
+```{r}
+head(listings$price[order(listings$price)], )
+```
+Given the context, the two listings with a price of $0 do not make sense.
+
+```{r}
+tail(listings$price[order(listings$price)], 20)
+```
+```{r}
+sum(listings$price > 2000)
+
+```
+There are 7 units priced over $2,000.
+
+```{r}
+listings %>% 
+  filter(price > 2000) %>% 
+  select(name, room_type, price)
+
+```
+
+The listing with the price of $10,000 seems to be an error as it's a private room with only a double bed. The other high priced listings however, are certainly plausible.
+
+```{r}
+listings %>% 
+  filter(price == 0) %>% 
+  select(name, room_type, price)
+```
+These listings also appear to be errors.
+
+Thus I will remove the listings with a price of $0 and the listing with a price of 10,000.
+
+```{r}
+boston_airbnb <-
+  listings %>% 
+  filter(price > 0 & price <= 9999) %>% 
+  mutate(log_price = log(price, 10)) #for color scale in the maps
+```
+
+Now we will create a boxplot that demonstrates the effect of neighborhood on price (arranged in increasing order of their median price).
+
+```{r}
+#for arrangement
+lvls <- 
+  boston_airbnb %>% 
+  group_by(neighbourhood) %>% 
+  summarise(m = median(price)) %>% 
+  arrange(m) %>% 
+  pull(neighbourhood)
+
+p_box <-
+  plot_ly(
+    boston_airbnb,
+    x = ~factor(neighbourhood, lvls),
+    y = ~price,
+    type = "box",
+    showlegend = FALSE,
+    name = ""
+  ) %>% 
+  layout(
+    yaxis = list(type = "log", title = "log(price)"),
+    xaxis = list(title = "", tickangle = -35)
+  )
+
+p_box
+```
+
