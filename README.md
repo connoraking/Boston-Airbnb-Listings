@@ -52,7 +52,7 @@ Since GitHub's Markdown rendering does not support intreactive content directly,
 ### Map with Listings
 ![](map_pics/p_listings.png)<!-- -->
 
-This map visualizes the geographic distribution of listings with their price represented in color (on a logarithmic scale). The logarithmic scale helps visualize a wide range of prices. The tooltip provides more details about each listing when hovered over the marker.
+This map visualizes the geographic distribution of listings with their price represented in color (on a logarithmic scale). The logarithmic scale helps visualize a wide range of prices. The tooltip provides more details about each listing when hovered over the marker. 
 
 ### Map with T stations and T lines
 
@@ -79,12 +79,17 @@ This map displays the average listing price for each neighborhood. This visualiz
 ### Map with Additional Features
 
 ![](map_pics/p_features.png)<!-- -->
+![](map_pics/p_features.png)<!-- -->
 
 - Within this map we added new markers for police stations, hospitals, Bluebike stations (a bicycle sharing system), electric vehicle charging stations, parking meters, and polygons for open/recreational spaces. 
 - The tooltip for the police stations includes the address.
 - The tooltip for hospitals includes the name and address.
 - The tooltip for Bluebike stations includes the station number, address, and total docks.
 - The tooltip for the EV charging stations includes the station name, address, EV network and EV connector.
+
+## Shiny App Development
+
+The interactive map and accompanying visualization tools were encapsulated into a Shiny app. This app, designed with a reactive user-friendly interface, allows users to adjust various parameters and observe the immediate impact on the map. fff
 
 
 
