@@ -1,3 +1,4 @@
+
 library(shiny)
 library(mapboxapi)
 library(shinyWidgets)
@@ -16,6 +17,7 @@ bikes <- read_csv("Blue_Bike_Stations.csv")
 meters <- read_csv("Parking_Meters.csv")
 hospitals <- read_csv("Hospitals.csv")
 ev <- read_csv("Charging_Stations.csv")
+open_spaces <- sf::st_read("Open_Space.kml")
 
 Sys.setenv("MAPBOX_TOKEN" = "pk.eyJ1IjoiYm9zdG9uY29ubm9yMTEiLCJhIjoiY2xncXIya2VxMGc1cTNmc2I3NjFoY2NkMyJ9.fcKb-W66WPlzv4oOx6ZC4A")
 
@@ -24,8 +26,8 @@ boston_airbnb <-
   filter(price > 0 & price <= 9999) %>% 
   mutate(log_price = log(price, 10)) %>% 
   mutate(min_nights_buckets = cut(minimum_nights,
-                                  breaks = c(-Inf, 3, 7, 14, 28, Inf),
-                                  labels = c("1-3 nights", "4-7 nights", "8-14 nights", "15-28 nights", "28+ nights")))
+                                  breaks = c(-Inf, 3, 7, 14, 28, 90, Inf),
+                                  labels = c("1-3 nights", "4-7 nights", "8-14 nights", "15-28 nights", "29-90 nights", "90+ nights")))
 
 boston_airbnb$neighbourhood[boston_airbnb$neighbourhood == 'Longwood Medical Area'] = 'Longwood'
 
@@ -72,11 +74,11 @@ ui <- fluidPage(
     #sidebar
     column(
       width = 4,
-      sliderInput("price", "Price Range:", min = 0, max = 4500, value = c(min(boston_airbnb$price), max(boston_airbnb$price)), step = 50),
-      checkboxGroupInput("min_nights", "Minimum Nights:", choices = c("1-3 nights", "4-7 nights", "8-14 nights", "15-28 nights", "28+ nights"), selected = c("1-3 nights", "4-7 nights", "8-14 nights", "15-28 nights", "28+ nights")), 
+      sliderInput("price", "Price Range:", min = 0, max = 4500, value = c(min(boston_airbnb$price), max(boston_airbnb$price)), step = 50),  
+      checkboxGroupInput("min_nights", "Minimum Nights:", choices = c("1-3 nights", "4-7 nights", "8-14 nights", "15-28 nights", "29-90 nights", "90+ nights"), selected = c("1-3 nights", "4-7 nights", "8-14 nights", "15-28 nights", "29-90 nights", "90+ nights")), 
       checkboxGroupInput("trainLine", "Subway Line:", choices = c("Red", "Green", "Orange", "Blue"), selected = c("Red", "Green", "Orange", "Blue")),
       checkboxGroupInput("room_type", "Room Type:", choices = c(unique(boston_airbnb$room_type)), selected = c(unique(boston_airbnb$room_type))),
-      pickerInput("map_features", "Map Features", choices = c("Hospitals", "Police Stations", "Bluebike Stations", "EV Charging Stations", "Parking Meters"), options = list('actions-box' = TRUE), multiple = TRUE),
+      pickerInput("map_features", "Map Features", choices = c("Hospitals", "Police Stations", "Bluebike Stations", "EV Charging Stations", "Parking Meters", "Recreational/Open Spaces"), options = list('actions-box' = TRUE), multiple = TRUE),
       pickerInput("neighborhood", "Neighborhood:", choices = unique(boston_neighborhoods$Name), options = list('actions-box' = TRUE), multiple = TRUE)
     ),
     
@@ -343,6 +345,7 @@ server <- function(input, output) {
   })
   
 }
+
 
 # Run the application 
 shinyApp(ui = ui, server = server)

@@ -107,3 +107,23 @@ p_box <-
 p_box
 ```
 
+Here's a look at the minimum nights distribution
+
+```{r}
+plot_ly(boston_airbnb, x = ~minimum_nights, type = "histogram")
+```
+
+There seems to be peaks around 28 nights and 90 nights thus we will create buckets that resonate with this. 
+
+```{r}
+boston_airbnb <-
+  listings %>% 
+  filter(price > 0 & price <= 9999) %>% 
+  mutate(log_price = log(price, 10)) %>% 
+  mutate(min_nights_buckets = cut(minimum_nights,
+                                  breaks = c(-Inf, 3, 7, 14, 28, 90, Inf),
+                                  labels = c("1-3 nights", "4-7 nights", "8-14 nights", "15-28 nights", "29-90 nights", "90+ nights")))
+
+plot_ly(boston_airbnb, x = ~min_nights_buckets, type = "histogram")
+```
+
