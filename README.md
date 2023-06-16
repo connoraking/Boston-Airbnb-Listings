@@ -11,13 +11,27 @@ The [Shiny app](https://connoraking.shinyapps.io/boston_listings_app/) was hoste
 
 ## Table of Contents
 
+1. [Introduction](#introduction)
+    - [Project Overiew](#project-overview)
+    - [Tools and Libraries Used](#tools-and-libaries-used)
+    - [Data Acquisition](#data-acquisition)
+2. [Data Cleaning and Pre-processing](#data-cleaning-and-pre-processing)
+3. [Map and Geospatial Analysis](maps-and-geospatial-analysis)
+    - [Map with Listings](#map-with-listings)
+    - [Maps with T stations and T lines](#map-with-t-stations-and-t-lines)
+    - [Map with Neighborhood Boundaries](#map-with-neighborhood-boundaries)
+    - [Choropleth Map](#choropleth-map)
+    - [Map with Additional Features](#map-with-additional-features)
+4. [Shiny App Development](#shiny-app-development)
+
+
 ## Introduction
 
 ### Project Overview
 
 This project serves as a demonstration of my proficiency in R programming, data analysis, and geospatial visualization. I have designed and developed an interactive tool using R and the Mapbox API that showcases various employment sectors and demographic trends across different geographical locations. The interactive map produced is particularly useful in visualizing and understanding the spatial distribution of these attributes, providing meaningful insights for urban planning, policy-making, and resource allocation decisions.
 
-### Tools and Libaries used
+### Tools and Libaries Used
 
 In the course of this project, I've applied extensive use of various R libraries:
 
@@ -58,7 +72,7 @@ This map visualizes the geographic distribution of listings with their price rep
 
 ![](map_pics/p_lines.png)<!-- -->
 
-This map includes T (subway) stations and lines. The color-coded lines represent different subway routes, helping to visualize public transportation accessibility for each listing. 
+This map includes T (subway) stations and lines. The color-coded lines represent different subway routes, helping to visualize public transportation accessibility for each listing. I created a function to add an `add_sf` layer. The `grepl` function was used to filter the colors because the colors had multiple different observations within the dataset that was converted into `sf` from `GPX`. For example there is *Red Line (main)*, *Red Line (Mattapan)*, etc. 
 
 ![](map_pics/boston_sub.png)<!-- -->
 
@@ -78,8 +92,7 @@ This map displays the average listing price for each neighborhood. This visualiz
 
 ### Map with Additional Features
 
-![](map_pics/p_features.png)<!-- -->
-![](map_pics/p_features.png)<!-- -->
+![](map_pics/p_features2.png)<!-- -->
 
 - Within this map we added new markers for police stations, hospitals, Bluebike stations (a bicycle sharing system), electric vehicle charging stations, parking meters, and polygons for open/recreational spaces. 
 - The tooltip for the police stations includes the address.
@@ -89,7 +102,20 @@ This map displays the average listing price for each neighborhood. This visualiz
 
 ## Shiny App Development
 
-The interactive map and accompanying visualization tools were encapsulated into a Shiny app. This app, designed with a reactive user-friendly interface, allows users to adjust various parameters and observe the immediate impact on the map. fff
+The interactive map and aforementioned visualizations were encapsulated into a Shiny app. This app, designed with a reactive user-friendly interface, allows users to adjust various parameters and observe the immediate impact on the map. The UI features a slider input for price, a check box input for subway line and room type, and then a picker input for map features and neighborhood. Selecting a certain input filters the listings to the appropriate neighborhoods and a corresponding boxplot is formed. The boxplot displayed in the lower left corner is the same boxplot design mentioned in the neighborhood map above. 
+
+### Analysis 
+
+Using the Shiny app, there I have made a few key observations.
+
+- The most expensive listings are among the intersections of the subway lines
+- Hotel room listings are almost entirely consisted within Downtown.
+- There are more hospitals around the more expensive listings. There seems to be a significant lack of neighborhoods within the poorer areas of Boston. Noticeably the neighborhoods of Hyde Park, Mattapan, and Dorchester.
+- Police Stations seemed to be evenly spread amongst all of the neighborhoods regardless of listing price.
+- EV charging stations are nearly exclusively featured amongst the most expensive listings located near Downtown.
+- Only a handful of streets (primarily downtown) contain parking meters.
+- The network of Bluebike stations seems to be organically laid out (seemingly equidistant from each other), however, there are definitely more concentrated near downtown Boston.
+- There are less open spaces near the more expensive listings (more urbanized).
 
 
 
