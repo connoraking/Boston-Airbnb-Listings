@@ -88,7 +88,7 @@ This map displays the average listing price for each neighborhood. This visualiz
 
 ## Shiny App Development
 
-The interactive map and accompanying visualization tools were encapsulated into a Shiny app. This app, designed with a reactive user-friendly interface, allows users to adjust various parameters and observe the immediate impact on the map. 
+The interactive map and accompanying visualization tools were encapsulated into a Shiny app. This app, designed with a reactive user-friendly interface, allows users to adjust various parameters and observe the immediate impact on the map. fff
 
 
 
