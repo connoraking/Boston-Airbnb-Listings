@@ -50,7 +50,7 @@ In the course of this project, I've applied extensive use of various R libraries
 Since GitHub's Markdown rendering does not support intreactive content directly, I cannot embed the the interactive maps into the document. Instead I will embedd png files for the maps. As a limitation, you won't be able to see the tooltips for each marker. Please check out the [Shiny app](https://connoraking.shinyapps.io/boston_listings_app/) I created which includes all features and interactivity.
 
 ### Map with Listings
-![](Boston/Airbnb/Listings/map_pics/p_listings)<!-- -->
+![](./map_pics/p_listings)<!-- -->
 
 
 
