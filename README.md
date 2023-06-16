@@ -11,13 +11,19 @@ The [Shiny app](https://connoraking.shinyapps.io/boston_listings_app/) was hoste
 
 ## Table of Contents
 
+1. [Introduction](#introduction)
+  - [Project Overiew](#project-overview)
+  - [Tools and Libraries Used](#tools-and-libaries-used)
+  - [Data Acquisition](#data-acquisition)
+2. [Data Cleaning and Pre-processing](#data-cleaning-and-pre-processing)
+
 ## Introduction
 
 ### Project Overview
 
 This project serves as a demonstration of my proficiency in R programming, data analysis, and geospatial visualization. I have designed and developed an interactive tool using R and the Mapbox API that showcases various employment sectors and demographic trends across different geographical locations. The interactive map produced is particularly useful in visualizing and understanding the spatial distribution of these attributes, providing meaningful insights for urban planning, policy-making, and resource allocation decisions.
 
-### Tools and Libaries used
+### Tools and Libaries Used
 
 In the course of this project, I've applied extensive use of various R libraries:
 
@@ -58,7 +64,7 @@ This map visualizes the geographic distribution of listings with their price rep
 
 ![](map_pics/p_lines.png)<!-- -->
 
-This map includes T (subway) stations and lines. The color-coded lines represent different subway routes, helping to visualize public transportation accessibility for each listing. 
+This map includes T (subway) stations and lines. The color-coded lines represent different subway routes, helping to visualize public transportation accessibility for each listing. I created a function to add an `add_sf` layer. The `grepl` function was used to filter the colors because the colors had multiple different observations within the dataset that was converted into `sf` from `GPX`. For example there is *Red Line (main)*, *Red Line (Mattapan)*, etc. 
 
 ![](map_pics/boston_sub.png)<!-- -->
 
@@ -88,7 +94,7 @@ This map displays the average listing price for each neighborhood. This visualiz
 
 ## Shiny App Development
 
-The interactive map and accompanying visualization tools were encapsulated into a Shiny app. This app, designed with a reactive user-friendly interface, allows users to adjust various parameters and observe the immediate impact on the map. fff
+The interactive map and aforementioned visualizations were encapsulated into a Shiny app. This app, designed with a reactive user-friendly interface, allows users to adjust various parameters and observe the immediate impact on the map. The UI features a slider input for price, a check box input for subway line and room type, and then a picker input for map features and neighborhood. Selecting a certain input filters the listings to the appropriate neighborhoods and a corresponding boxplot is formed. The boxplot displayed in the lower left corner is the same boxplot design mentioned in the neighborhood map above. 
 
 
 
