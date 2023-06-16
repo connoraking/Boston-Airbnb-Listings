@@ -16,6 +16,14 @@ The [Shiny app](https://connoraking.shinyapps.io/boston_listings_app/) was hoste
     - [Tools and Libraries Used](#tools-and-libaries-used)
     - [Data Acquisition](#data-acquisition)
 2. [Data Cleaning and Pre-processing](#data-cleaning-and-pre-processing)
+3. [Map and Geospatial Analysis](maps-and-geospatial-analysis)
+    - [Map with Listings](#map-with-listings)
+    - [Maps with T stations and T lines](#map-with-t-stations-and-t-lines)
+    - [Map with Neighborhood Boundaries](#map-with-neighborhood-boundaries)
+    - [Choropleth Map](#choropleth-map)
+    - [Map with Additional Features](#map-with-additional-features)
+4. [Shiny App Development](#shiny-app-development)
+
 
 ## Introduction
 
