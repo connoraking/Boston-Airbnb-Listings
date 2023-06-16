@@ -22,7 +22,10 @@ Sys.setenv("MAPBOX_TOKEN" = "pk.eyJ1IjoiYm9zdG9uY29ubm9yMTEiLCJhIjoiY2xncXIya2Vx
 boston_airbnb <-
   listings %>% 
   filter(price > 0 & price <= 9999) %>% 
-  mutate(log_price = log(price, 10))
+  mutate(log_price = log(price, 10)) %>% 
+  mutate(min_nights_buckets = cut(minimum_nights,
+                                  breaks = c(-Inf, 3, 7, 14, 28, Inf),
+                                  labels = c("1-3 nights", "4-7 nights", "8-14 nights", "15-28 nights", "28+ nights")))
 
 boston_airbnb$neighbourhood[boston_airbnb$neighbourhood == 'Longwood Medical Area'] = 'Longwood'
 
@@ -69,7 +72,8 @@ ui <- fluidPage(
     #sidebar
     column(
       width = 4,
-      sliderInput("price", "Price Range:", min = 0, max = 4500, value = c(min(boston_airbnb$price), max(boston_airbnb$price)), step = 50),  
+      sliderInput("price", "Price Range:", min = 0, max = 4500, value = c(min(boston_airbnb$price), max(boston_airbnb$price)), step = 50),
+      checkboxGroupInput("min_nights", "Minimum Nights:", choices = c("1-3 nights", "4-7 nights", "8-14 nights", "15-28 nights", "28+ nights"), selected = c("1-3 nights", "4-7 nights", "8-14 nights", "15-28 nights", "28+ nights")), 
       checkboxGroupInput("trainLine", "Subway Line:", choices = c("Red", "Green", "Orange", "Blue"), selected = c("Red", "Green", "Orange", "Blue")),
       checkboxGroupInput("room_type", "Room Type:", choices = c(unique(boston_airbnb$room_type)), selected = c(unique(boston_airbnb$room_type))),
       pickerInput("map_features", "Map Features", choices = c("Hospitals", "Police Stations", "Bluebike Stations", "EV Charging Stations", "Parking Meters"), options = list('actions-box' = TRUE), multiple = TRUE),
@@ -95,82 +99,32 @@ ui <- fluidPage(
 
 
 #-------------server-------------
-
-
-listings <- read_csv("listings_2023.csv")
-hospitals <- read_csv("Hospitals.csv")
-police <- read_csv("Boston_Police_Stations.csv")
-bikes <- read_csv("Blue_Bike_Stations.csv")
-meters <- read_csv("Parking_Meters.csv")
-hospitals <- read_csv("Hospitals.csv")
-ev <- read_csv("Charging_Stations.csv")
-
-
-meters <- meters %>%
-  separate(PAY_POLICY, into = c("pay_time", "pay_days", "pay_rate", "pay_duration"), sep = " ", extra = "merge") %>% 
-  mutate(pay_duration = as.numeric(pay_duration)/60)
-
-Sys.setenv("MAPBOX_TOKEN" = "pk.eyJ1IjoiYm9zdG9uY29ubm9yMTEiLCJhIjoiY2xncXIya2VxMGc1cTNmc2I3NjFoY2NkMyJ9.fcKb-W66WPlzv4oOx6ZC4A")
-
-boston_airbnb <-
-  listings %>% 
-  filter(price > 0 & price <= 9999) %>% 
-  mutate(log_price = log(price, 10))
-
-boston_airbnb$neighbourhood[boston_airbnb$neighbourhood == 'Longwood Medical Area'] = 'Longwood'
-
-lvls <- 
-  boston_airbnb %>% 
-  group_by(neighbourhood) %>% 
-  summarise(m = median(price)) %>% 
-  arrange(m) %>% 
-  pull(neighbourhood)
-
-library(tmaptools)
-mbta <- read_GPX("mbta.gpx")
-
-stations <-
-  mbta$waypoints %>%
-  filter(grepl('Red Line|Green Line|Blue Line|Orange Line', type))
-
-T_lines <-
-  mbta$tracks %>%
-  filter(grepl('Red Line|Green Line|Blue Line|Orange Line', name))
-
-
-boston_neighborhoods <- sf::st_read("Boston_Neighborhoods.kml")
-
-add_MBTA_line <- function(p, line_color) {
-  res <-
-    p %>% 
-    add_sf(
-      data = T_lines %>% filter(grepl(line_color, name, ignore.case = TRUE)),
-      color = ~I(line_color),
-      text = ~name,
-      hoverinfo = "text",
-      name = paste0(line_color, " line")
-    )
-  return(res) }
-
-
 server <- function(input, output) {
   
   #reactive data
   filtered_data <- reactive({
     data <- boston_airbnb
     
+    #reactive price
     data <- data[data$price >= input$price[1] & data$price <= input$price[2], ]
     
+    #reactive min nights
+    if(!is.null(input$min_nights)) {
+      data <- data %>% 
+        filter(min_nights_buckets %in% input$min_nights)
+    }
+    
+    #reactive room type
     if(!is.null(input$room_type)){
       data <- data %>% 
         filter(room_type %in% input$room_type)
     }
     
+    #reactive neighborhood
     if (!is.null(input$neighborhood)) {
       data <- data %>% filter(neighbourhood %in% input$neighborhood)
       selected_neighborhoods <- boston_neighborhoods[boston_neighborhoods$Name %in% input$neighborhood, ]
     }
-    
     
     data 
     
@@ -334,7 +288,7 @@ server <- function(input, output) {
           "\nConnector: ", EV_Connector_Types
         ),
         hoverinfo = "text",
-        marker = list(color = "darkgreen", size = 7)
+        marker = list(color = "orange", size = 7)
       )
     }
     
@@ -354,6 +308,17 @@ server <- function(input, output) {
         ),
         hoverinfo = "text",
         marker = list(color = "#8c564b", size = 5)
+      )
+    }
+    
+    if ("Recreational/Open Spaces" %in% input$map_features){
+      p <- p %>% add_sf(
+        inherit = FALSE,
+        data = open_spaces,
+        name = "Open Spcae",
+        text = ~Name,
+        hoverinfo = "text",
+        color = I("darkgreen")
       )
     }
     
@@ -378,7 +343,6 @@ server <- function(input, output) {
   })
   
 }
-
 
 # Run the application 
 shinyApp(ui = ui, server = server)
