@@ -58,19 +58,21 @@ This map visualizes the geographic distribution of listings with their price rep
 
 ![](map_pics/p_lines.png)<!-- -->
 
-This map includes T (subway) stations and lines. The color-coded lines represent different subway routes, helping to visualize public transportation accessibility for each listing.
+This map includes T (subway) stations and lines. The color-coded lines represent different subway routes, helping to visualize public transportation accessibility for each listing. 
+
+![](map_pics/boston_sub.png)<!-- -->
 
 ### Map with Neighborhood Boundaries
 
 ![](map_pics/p_neigh.png)<!-- -->
 
-This map displays neighborhood boundaries to provide a clear delineation of different areas within Boston. It also includes a side-by-side boxplot for each neighborhood.
+This map displays neighborhood boundaries to provide a clear delineation of different areas within Boston. It also includes a side-by-side boxplot for each neighborhood. The boxplot is ordered in ascending value for the median price of each neighborhood.
 
 ### Choropleth Map
 
 ![](map_pics/neigh_choro.png)<!-- -->
 
-This map displays the average listing price for each neighborhood. This visualization helps to identify the more expensive and cheaper neighborhoods in Boston.
+This map displays the average listing price for each neighborhood. This visualization helps to identify the more expensive and cheaper neighborhoods in Boston. The visualization of mean prices can potentially serve as a proxy for the median household income for each neighborhood as they seem to be correlated with real life context.
 
 
 
