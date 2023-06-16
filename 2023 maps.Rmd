@@ -11,6 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Mapping Price
 
+Here is the beginning code from the exploratory data analysis file that loads in the cleaning listings dataset and creates a box plot using log prices.
+
 ```{r, include = FALSE}
 library(tidyverse)
 library(plotly)
@@ -53,6 +55,7 @@ p_box <-
   )
 ```
 
+Here is the `plotly` mapbox with just listings mapped.
 
 ```{r}
 
@@ -90,9 +93,9 @@ p
 
 ## Adding T stations and T lines
 
-I will insert a `GPX` formatted file of MBTA stations from  http://erikdemaine.org/maps/mbta/ which incluedes all the waypoints of the MBTA stations as well as routes of rapid transit lines.
+I will insert a `GPX` formatted file of MBTA stations from  http://erikdemaine.org/maps/mbta/ which includes all the waypoints of the MBTA stations as well as routes of rapid transit lines.
 
-I will use `read_GPX()` function from `tmaptools` package which reas `GPX` files into `sf` objects in R.
+I will use `read_GPX()` function from `tmaptools` package which reads `GPX` files into `sf` objects in R.
 
 ```{r}
 library(tmaptools)
@@ -205,6 +208,7 @@ bikes <- read_csv("Blue_Bike_Stations.csv")
 meters <- read_csv("Parking_Meters.csv")
 hospitals <- read_csv("Hospitals.csv")
 ev <- read_csv("Charging_Stations.csv")
+open_space <- sf::st_read("Open_Space.kml")
 
 
 meters <- meters %>%
@@ -225,7 +229,9 @@ p_h <- p %>%
     text = ~paste(Name,
                   "\nAddress: ", Address),
     hoverinfo = "text",
-    marker = list(color = 'magenta', size = 7)
+    marker = list(
+      color = 'magenta', 
+      size = 7)
   ) %>% 
   add_trace(
     data = bikes,
@@ -238,7 +244,8 @@ p_h <- p %>%
                   "\nAddress: ", Name,
                   "\nTotal Docks: ", Total_docks),
     hoverinfo = "text",
-    marker = list(color = 'navy', size = 5)
+    marker = list(
+      color = 'navy', size = 5)
   ) %>% 
   add_trace(
     data = police,
@@ -280,8 +287,15 @@ p_h <- p %>%
     ),
     hoverinfo = "text",
     marker = list(color = "#8c564b", size = 7)
+  ) %>% 
+  add_sf(
+      inherit = FALSE,
+      data = open_space,
+      name = "Open Spcae",
+      text = ~Name,
+      hoverinfo = "text",
+      color = I("darkgreen")
   )
-  
 
 p_h
 ```
