@@ -62,6 +62,8 @@ This map includes T (subway) stations and lines. The color-coded lines represent
 
 ![](map_pics/boston_sub.png)<!-- -->
 
+Comparing the official subway map with our map with the subway lines added, we can clearly see that the official map distorts the lines. The official map distorts the lines for a variety of reasons, mostly related to the goal of clarity, readability, and simplicity for the user. 
+
 ### Map with Neighborhood Boundaries
 
 ![](map_pics/p_neigh.png)<!-- -->
