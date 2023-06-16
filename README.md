@@ -30,4 +30,28 @@ In the course of this project, I've applied extensive use of various R libraries
 ### Data Acquisition
 
 - Listings (March 19th 2023): [Inside Airbnb](http://insideairbnb.com/get-the-data/)
-- MBTA data: [](http://erikdemaine.org/maps/mbta/)
+- MBTA data: [Erik Demaine](http://erikdemaine.org/maps/mbta/)
+- Neighborhood Lines: [Boston Maps](https://data.boston.gov/dataset/boston-neighborhoods) 
+- Hospitals: [Boston Maps](https://data.boston.gov/dataset/hospitals)
+- Police Stations: [Boston Maps](https://data.boston.gov/dataset/boston-police-stations) 
+- Bluebike Stations: [Boston Maps](https://data.boston.gov/dataset/blue-bike-stations)
+- EV Charging Stations: [Boston Maps](https://data.boston.gov/dataset/charging-stations)
+- Parking Meters: [Boston Maps](https://data.boston.gov/dataset/parking-meters)
+- Recreational Spaces: [Boston Maps](https://data.boston.gov/dataset/open-space)
+
+## Data Cleaning and Pre-processing
+
+- Listings valued at $0 or outliers deemed to be errors were removed. 
+- The `grepl` package was used to parse MBTA stations and subway lines.
+- The `meters` data set was wrangled from a single `str` column named `PAY_POLICY` into columns `pay_time`, `pay_days`, `pay_rate`, and `pay_duration`. These new columns were then used in the tooltip for the associated markers.
+
+## Maps and Geospatial Analysis
+
+Since GitHub's Markdown rendering does not support intreactive content directly, I cannot embed the the interactive maps into the document. Instead I will embedd png files for the maps. As a limitation, you won't be able to see the tooltips for each marker. Please check out the [Shiny app](https://connoraking.shinyapps.io/boston_listings_app/) I created which includes all features and interactivity.
+
+### Map with Listings
+![](map_pics/p_listings)<!-- -->
+
+
+
+
