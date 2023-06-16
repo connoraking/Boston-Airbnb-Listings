@@ -12,9 +12,9 @@ The [Shiny app](https://connoraking.shinyapps.io/boston_listings_app/) was hoste
 ## Table of Contents
 
 1. [Introduction](#introduction)
-  - [Project Overiew](#project-overview)
-  - [Tools and Libraries Used](#tools-and-libaries-used)
-  - [Data Acquisition](#data-acquisition)
+    - [Project Overiew](#project-overview)
+    - [Tools and Libraries Used](#tools-and-libaries-used)
+    - [Data Acquisition](#data-acquisition)
 2. [Data Cleaning and Pre-processing](#data-cleaning-and-pre-processing)
 
 ## Introduction
