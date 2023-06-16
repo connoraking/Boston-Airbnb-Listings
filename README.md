@@ -2,7 +2,7 @@
 
 The objective of this project was to create an interactive application that provides users with various information about AirBnB listings in the Boston area. The app allows users to filter listings by price range and room type, and choose different features they want to visualize on the map such as hospitals, police stations, bike stations, EV charging stations, and parking meters. In addition, the application provides an option to select and highlight different neighborhoods and public transit lines, allowing users to explore the city's infrastructure in relation to the AirBnB listings. The project was coded using R within Rstudio.
 
-- **EDA**: Exploratory data analysis with visualizations can be found here: [EDA](./2023_eda.Rmd)
+- **EDA**: Exploratory data analysis with visualizations can be found here: [EDA](Boston-Airbnb-Listings/2023_eda.Rmd)
 - **Report**: A more detailed report of the maps can be found here: [Report](./2023_maps.Rmd)
 
 ## Shiny App
@@ -50,7 +50,7 @@ In the course of this project, I've applied extensive use of various R libraries
 Since GitHub's Markdown rendering does not support intreactive content directly, I cannot embed the the interactive maps into the document. Instead I will embedd png files for the maps. As a limitation, you won't be able to see the tooltips for each marker. Please check out the [Shiny app](https://connoraking.shinyapps.io/boston_listings_app/) I created which includes all features and interactivity.
 
 ### Map with Listings
-![](map_pics/p_listings)<!-- -->
+![](Boston/Airbnb/Listings/map_pics/p_listings)<!-- -->
 
 
 
