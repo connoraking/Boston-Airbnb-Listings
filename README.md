@@ -2,8 +2,8 @@
 
 The objective of this project was to create an interactive application that provides users with various information about AirBnB listings in the Boston area. The app allows users to filter listings by price range and room type, and choose different features they want to visualize on the map such as hospitals, police stations, bike stations, EV charging stations, and parking meters. In addition, the application provides an option to select and highlight different neighborhoods and public transit lines, allowing users to explore the city's infrastructure in relation to the AirBnB listings. The project was coded using R within Rstudio.
 
-- **EDA**: Exploratory data analysis with visualizations can be found here: [EDA](./2023_eda.Rmd)
-- **Report**: A more detailed report of the maps can be found here: [Report](./2023_maps.Rmd)
+- **EDA**: Rmarkdown Exploratory data analysis with visualizations can be found here: [EDA](./2023_eda.Rmd)
+- **Report**: A more detailed Rmarkdown report of the maps can be found here: [Report](./2023_maps.Rmd)
 
 ## Shiny App
 
@@ -76,6 +76,15 @@ This map displays neighborhood boundaries to provide a clear delineation of diff
 
 This map displays the average listing price for each neighborhood. This visualization helps to identify the more expensive and cheaper neighborhoods in Boston. The visualization of mean prices can potentially serve as a proxy for the median household income for each neighborhood as they seem to be correlated with real life context.
 
+### Map with Additional Features
+
+![](map_pics/p_features.png)<!-- -->
+
+- Within this map we added new markers for police stations, hospitals, Bluebike stations (a bicycle sharing system), electric vehicle charging stations, parking meters, and polygons for open/recreational spaces. 
+- The tooltip for the police stations includes the address.
+- The tooltip for hospitals includes the name and address.
+- The tooltip for Bluebike stations includes the station number, address, and total docks.
+- The tooltip for the EV charging stations includes the station name, address, EV network and EV connector.
 
 
 
