@@ -47,10 +47,34 @@ In the course of this project, I've applied extensive use of various R libraries
 
 ## Maps and Geospatial Analysis
 
-Since GitHub's Markdown rendering does not support intreactive content directly, I cannot embed the the interactive maps into the document. Instead I will embedd png files for the maps. As a limitation, you won't be able to see the tooltips for each marker. Please check out the [Shiny app](https://connoraking.shinyapps.io/boston_listings_app/) I created which includes all features and interactivity.r
+Since GitHub's Markdown rendering does not support intreactive content directly, I cannot embed the the interactive maps into the document. Instead I will embedd png files for the maps. As a limitation, you won't be able to see the tooltips for each marker. Please check out the [Shiny app](https://connoraking.shinyapps.io/boston_listings_app/) I created which includes all features and interactivity.
 
 ### Map with Listings
 ![](map_pics/p_listings.png)<!-- -->
+
+This map visualizes the geographic distribution of listings with their price represented in color (on a logarithmic scale). The logarithmic scale helps visualize a wide range of prices. The tooltip provides more details about each listing when hovered over the marker.
+
+### Map with T stations and T lines
+
+![](map_pics/p_lines.png)<!-- -->
+
+This map includes T (subway) stations and lines. The color-coded lines represent different subway routes, helping to visualize public transportation accessibility for each listing.
+
+### Map with Neighborhood Boundaries
+
+![](map_pics/p_neigh.png)<!-- -->
+
+This map displays neighborhood boundaries to provide a clear delineation of different areas within Boston. It also includes a side-by-side boxplot for each neighborhood.
+
+### Choropleth Map
+
+![](map_pics/neigh_choro.png)<!-- -->
+
+This map displays the average listing price for each neighborhood. This visualization helps to identify the more expensive and cheaper neighborhoods in Boston.
+
+
+
+
 
 
 
