@@ -60,7 +60,7 @@ This map visualizes the geographic distribution of listings with their price rep
 
 This map includes T (subway) stations and lines. The color-coded lines represent different subway routes, helping to visualize public transportation accessibility for each listing. 
 
-![](map_pics/boston_sub.jng)<!-- -->
+![](map_pics/boston_sub.png)<!-- -->
 
 ### Map with Neighborhood Boundaries
 
