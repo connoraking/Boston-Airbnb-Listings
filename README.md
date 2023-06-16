@@ -78,8 +78,7 @@ This map displays the average listing price for each neighborhood. This visualiz
 
 ### Map with Additional Features
 
-![](map_pics/p_features.png)<!-- -->
-![](map_pics/p_features.png)<!-- -->
+![](map_pics/p_features2.png)<!-- -->
 
 - Within this map we added new markers for police stations, hospitals, Bluebike stations (a bicycle sharing system), electric vehicle charging stations, parking meters, and polygons for open/recreational spaces. 
 - The tooltip for the police stations includes the address.
