@@ -104,6 +104,19 @@ This map displays the average listing price for each neighborhood. This visualiz
 
 The interactive map and aforementioned visualizations were encapsulated into a Shiny app. This app, designed with a reactive user-friendly interface, allows users to adjust various parameters and observe the immediate impact on the map. The UI features a slider input for price, a check box input for subway line and room type, and then a picker input for map features and neighborhood. Selecting a certain input filters the listings to the appropriate neighborhoods and a corresponding boxplot is formed. The boxplot displayed in the lower left corner is the same boxplot design mentioned in the neighborhood map above. 
 
+### Analysis 
+
+Using the Shiny app, there I have made a few key observations.
+
+- The most expensive listings are among the intersections of the subway lines
+- Hotel room listings are almost entirely consisted within Downtown.
+- There are more hospitals around the more expensive listings. There seems to be a significant lack of neighborhoods within the poorer areas of Boston. Noticeably the neighborhoods of Hyde Park, Mattapan, and Dorchester.
+- Police Stations seemed to be evenly spread amongst all of the neighborhoods regardless of listing price.
+- EV charging stations are nearly exclusively featured amongst the most expensive listings located near Downtown.
+- Only a handful of streets (primarily downtown) contain parking meters.
+- The network of Bluebike stations seems to be organically laid out (seemingly equidistant from each other), however, there are definitely more concentrated near downtown Boston.
+- There are less open spaces near the more expensive listings (more urbanized).
+
 
 
 
