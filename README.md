@@ -70,7 +70,7 @@ This map visualizes the geographic distribution of listings with their price rep
 
 ### Map with T stations and T lines
 
-![](map_pics/p_lines.png)<!-- -->
+<img src="map_pics/p_lines.png" width="500" height="300" />
 
 This map includes T (subway) stations and lines. The color-coded lines represent different subway routes, helping to visualize public transportation accessibility for each listing. I created a function to add an `add_sf` layer. The `grepl` function was used to filter the colors because the colors had multiple different observations within the dataset that was converted into `sf` from `GPX`. For example there is *Red Line (main)*, *Red Line (Mattapan)*, etc. 
 
