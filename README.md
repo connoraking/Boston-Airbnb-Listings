@@ -70,11 +70,11 @@ This map visualizes the geographic distribution of listings with their price rep
 
 ### Map with T stations and T lines
 
-<img src="map_pics/p_lines.png" width="500" height="300" />
+![](map_pics/p_lines.png)<!-- -->
 
 This map includes T (subway) stations and lines. The color-coded lines represent different subway routes, helping to visualize public transportation accessibility for each listing. I created a function to add an `add_sf` layer. The `grepl` function was used to filter the colors because the colors had multiple different observations within the dataset that was converted into `sf` from `GPX`. For example there is *Red Line (main)*, *Red Line (Mattapan)*, etc. 
 
-![](map_pics/boston_sub.png)<!-- -->
+<img src="map_pics/boston_sub.png" width="500" />
 
 Comparing the official subway map with our map with the subway lines added, we can clearly see that the official map distorts the lines. The official map distorts the lines for a variety of reasons, mostly related to the goal of clarity, readability, and simplicity for the user. 
 
