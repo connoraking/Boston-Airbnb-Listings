@@ -109,7 +109,7 @@ The interactive map and aforementioned visualizations were encapsulated into a S
 
 ### Analysis 
 
-Using the [Shiny app](https://connoraking.shinyapps.io/boston_listings_app/) was hosted on shinyapps.io, there I have made a few key observations.
+Using the [Shiny app](https://connoraking.shinyapps.io/boston_listings_app/) that was hosted on shinyapps.io, I have made a few key observations:
 
 - The most expensive listings are among the intersections of the subway lines
 - Hotel room listings are almost entirely consisted within Downtown.
