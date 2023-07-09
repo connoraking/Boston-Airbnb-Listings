@@ -113,7 +113,7 @@ Using the [Shiny app](https://connoraking.shinyapps.io/boston_listings_app/) tha
 
 - The most expensive listings are among the intersections of the subway lines
 - Hotel room listings are almost entirely consisted within Downtown.
-- There are more hospitals around the more expensive listings. There seems to be a significant lack of neighborhoods within the poorer areas of Boston. Noticeably the neighborhoods of Hyde Park, Mattapan, and Dorchester.
+- There are more hospitals around the more expensive listings. There seems to be a significant lack of hospitals within the poorer areas of Boston. Noticeably the neighborhoods of Hyde Park, Mattapan, and Dorchester.
 - Police Stations seemed to be evenly spread amongst all of the neighborhoods regardless of listing price.
 - EV charging stations are nearly exclusively featured amongst the most expensive listings located near Downtown.
 - Only a handful of streets from the data (primarily downtown) contain parking meters.
